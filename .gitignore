@@ -1,3 +1,8 @@
+.flutter-plugins
+.flutter-plugins-dependencies
+
+.dart_tool/
+/build/
 
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
