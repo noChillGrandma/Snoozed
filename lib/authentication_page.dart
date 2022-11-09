@@ -4,14 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:smarttodo/sign_in.dart';
 import 'package:smarttodo/sign_up.dart';
 
-class AuthenticationPage69 extends StatefulWidget {
-  const AuthenticationPage69({Key? key}) : super(key: key);
+class AuthenticationPage extends StatefulWidget {
+  const AuthenticationPage({Key? key}) : super(key: key);
 
   @override
-  State<AuthenticationPage69> createState() => _AuthenticationPage69State();
+  State<AuthenticationPage> createState() => _AuthenticationPageState();
 }
 
-class _AuthenticationPage69State extends State<AuthenticationPage69> {
+class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
