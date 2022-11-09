@@ -12,14 +12,14 @@ import 'package:smarttodo/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class HomePage69 extends StatefulWidget {
-    const HomePage69({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+    const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage69> createState() => _HomePage69State();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePage69State extends State<HomePage69> {
+class _HomePageState extends State<HomePage> {
 
   late TextEditingController taskTitleController69 = TextEditingController();
   late TextEditingController taskDescriptionController69 = TextEditingController();
