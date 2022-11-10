@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             )
           )
         ),
-        home: AuthenticationWrapper69(),
+        home: AuthenticationWrapper(),
         localizationsDelegates: <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,

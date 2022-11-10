@@ -70,7 +70,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           ),
                         ), 
                         onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignIn69()));
+                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignInPage()));
                         }
                       ),
                     ),
@@ -107,7 +107,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           ),
                         ), 
                         onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignUp69()));
+                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignUpPage()));
                         }
                       ),
                     ),

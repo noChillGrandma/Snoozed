@@ -32,7 +32,7 @@ class AuthenticationService {
 
         Future.delayed(Duration(milliseconds: 400), () {
             Navigator.of(context, rootNavigator: true).pushReplacement(
-                CupertinoPageRoute(builder: (_) => AuthenticationWrapper69()));
+                CupertinoPageRoute(builder: (_) => AuthenticationWrapper()));
           });
       return 'Signed in';
     } on FirebaseAuthException catch (e) {

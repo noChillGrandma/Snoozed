@@ -21,12 +21,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  late TextEditingController taskTitleController69 = TextEditingController();
-  late TextEditingController taskDescriptionController69 = TextEditingController();
-  late TextEditingController taskLinkController69 = TextEditingController();
-  late TextEditingController editTaskTitleController69 = TextEditingController();
-  late TextEditingController editTaskDescriptionController69 = TextEditingController();
-  late TextEditingController editTaskLinkController69 = TextEditingController();
+  late TextEditingController taskTitleController = TextEditingController();
+  late TextEditingController taskDescriptionController = TextEditingController();
+  late TextEditingController taskLinkController = TextEditingController();
+  late TextEditingController editTaskTitleController = TextEditingController();
+  late TextEditingController editTaskDescriptionController = TextEditingController();
+  late TextEditingController editTaskLinkController = TextEditingController();
   final formKeySaveTask = GlobalKey<FormState>();
   late String taskDocID = '';
   bool isEditModeEnabled = false;
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     taskDocID = generateTaskDocID();
-    editTaskLinkController69 = TextEditingController(text: '');
+    editTaskLinkController = TextEditingController(text: '');
     super.initState();
   }
 
@@ -142,9 +142,9 @@ class _HomePageState extends State<HomePage> {
                                   .collection('myTasks')
                                   .doc(taskDocID)
                                   .update({
-                                    'taskTile': editTaskTitleController69.text,
-                                    'taskDescription': editTaskDescriptionController69.text,
-                                    'taskAttachedLink': editTaskLinkController69.text,
+                                    'taskTile': editTaskTitleController.text,
+                                    'taskDescription': editTaskDescriptionController.text,
+                                    'taskAttachedLink': editTaskLinkController.text,
                                   });
                                 }
                               return Builder(
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                                                 Radius.circular(20.0),
                                                                 ),
                                                               ),
-                                                              controller: editTaskTitleController69,
+                                                              controller: editTaskTitleController,
                                                               style: const TextStyle(
                                                                 fontSize: 20
                                                               ),
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                                                                 Radius.circular(20.0),
                                                                 ),
                                                               ),
-                                                              controller: editTaskDescriptionController69,
+                                                              controller: editTaskDescriptionController,
                                                               style: const TextStyle(
                                                                 fontSize: 20
                                                               ),
@@ -298,7 +298,7 @@ class _HomePageState extends State<HomePage> {
                                                                     Radius.circular(20.0),
                                                                     ),
                                                                   ),
-                                                                  controller: editTaskLinkController69,
+                                                                  controller: editTaskLinkController,
                                                                 ),
                                                               ),
                                                             ),
@@ -503,9 +503,9 @@ class _HomePageState extends State<HomePage> {
                                                     size: 22,),
                                                   onPressed: (){
                                                     setState(() {
-                                                      editTaskTitleController69.text = taskTile;
-                                                      editTaskLinkController69.text = taskAttachedLink;
-                                                      editTaskDescriptionController69.text = taskDescription;
+                                                      editTaskTitleController.text = taskTile;
+                                                      editTaskLinkController.text = taskAttachedLink;
+                                                      editTaskDescriptionController.text = taskDescription;
                                                       isEditModeEnabled = true;
                                                     });
                                                   }
@@ -727,7 +727,6 @@ class _HomePageState extends State<HomePage> {
                   color: CupertinoColors.white,),
                   onPressed: (){
                     _showAddTaskPanel(context);
-                    // Navigator.push(context, CupertinoPageRoute(builder: (context) => AddTask69()));
              
                   },
                 ),
@@ -836,12 +835,12 @@ Future<void> _launchInBrowser(Uri url) async {
                                                       Radius.circular(20.0),
                                                       ),
                                                     ),
-                                                    controller: taskTitleController69,
-                                                    validator: (taskTitle69) {
-                                                      if (taskTitle69 == null || taskTitle69.isEmpty) {
+                                                    controller: taskTitleController,
+                                                    validator: (taskTitle) {
+                                                      if (taskTitle == null || taskTitle.isEmpty) {
                                                         return 'please type something first';
                                                         
-                                                      } else if (taskTitle69.length < 3) {
+                                                      } else if (taskTitle.length < 3) {
                                                         return 'must be at least 3 characters long';
                                                         
                                                       } else {
@@ -881,7 +880,7 @@ Future<void> _launchInBrowser(Uri url) async {
                                                       Radius.circular(20.0),
                                                       ),
                                                     ),
-                                                    controller: taskDescriptionController69,
+                                                    controller: taskDescriptionController,
                                                   ),
                                                 ),
                                               ),
@@ -916,7 +915,7 @@ Future<void> _launchInBrowser(Uri url) async {
                                                       Radius.circular(20.0),
                                                       ),
                                                     ),
-                                                    controller: taskLinkController69,
+                                                    controller: taskLinkController,
                                                   ),
                                                 ),
                                               ),
@@ -963,9 +962,9 @@ Future<void> _launchInBrowser(Uri url) async {
                                                           fontSize:16
                                                         );
                                                                                     
-                                                        taskTitleController69.clear();
-                                                        taskDescriptionController69.clear();
-                                                        taskLinkController69.clear();
+                                                        taskTitleController.clear();
+                                                        taskDescriptionController.clear();
+                                                        taskLinkController.clear();
                                           
                                                         setState(() {
                                                           taskDocID = generateTaskDocID();
@@ -1324,9 +1323,9 @@ Future<void> _launchInBrowser(Uri url) async {
     .collection('myTasks')
     .doc(taskDocID)
     .set({
-      'taskTile': taskTitleController69.text,
-      'taskDescription': taskDescriptionController69.text,
-      'taskAttachedLink': taskLinkController69.text,
+      'taskTile': taskTitleController.text,
+      'taskDescription': taskDescriptionController.text,
+      'taskAttachedLink': taskLinkController.text,
       'taskDocID': taskDocID,
       'dueDate': Timestamp.now(),
       'isTaskCompleted': false,

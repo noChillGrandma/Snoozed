@@ -6,17 +6,17 @@ import 'package:provider/provider.dart';
 import 'package:smarttodo/authentication/services/authentication_service.dart';
 
 
-class SignIn69 extends StatefulWidget {
-  const SignIn69({Key? key}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
-  State<SignIn69> createState() => _SignIn69State();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignIn69State extends State<SignIn69> {
+class _SignInPageState extends State<SignInPage> {
 
-  late TextEditingController emailController69 = TextEditingController();
-  late TextEditingController passwordController69 = TextEditingController();
+  late TextEditingController emailController = TextEditingController();
+  late TextEditingController passwordController = TextEditingController();
 
 
   @override
@@ -76,18 +76,7 @@ class _SignIn69State extends State<SignIn69> {
                             Radius.circular(20.0),
                             ),
                           ),
-                          controller: emailController69,
-                          // validator: (quickReply) {
-                          //   if (quickReply == null || quickReply.isEmpty) {
-                          //     return 'please type something first';
-                              
-                          //   } else if (quickReply.length < 3) {
-                          //     return 'must be at least 3 characters long';
-                              
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // }
+                          controller: emailController,
                         ),
                       ),
                     ),
@@ -121,18 +110,7 @@ class _SignIn69State extends State<SignIn69> {
                             Radius.circular(20.0),
                             ),
                           ),
-                          controller: passwordController69,
-                          // validator: (quickReply) {
-                          //   if (quickReply == null || quickReply.isEmpty) {
-                          //     return 'please type something first';
-                              
-                          //   } else if (quickReply.length < 3) {
-                          //     return 'must be at least 3 characters long';
-                              
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // }
+                          controller: passwordController,
                         ),
                       ),
                     ),
@@ -172,36 +150,22 @@ class _SignIn69State extends State<SignIn69> {
                         onPressed: () async {
                           try {
                             await context.read<AuthenticationService>().signIn(
-                              email: emailController69.text.trim(),
-                              password: passwordController69.text.trim(), context: context
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim(), context: context
                             );
-                          // Navigator.of(context, rootNavigator: true).pop();
-                            
-                          } catch (eerr69) {
-                            print(eerr69);
-                            
+                          } catch (error) {
+                            print(error);
                           }
-                          
-                          // Navigator.of(context, rootNavigator: true).pop();
                         }
                       ),
                     ),
                   ),
                 )
-
               ],
             ),
-            
-
           ],
         ),
       ),
     );
   }
 }
-
-
-// context.read<AuthenticationService>().signIn(
-//             email: emailController.text.trim(),
-//             password: passwordController.text.trim(), context: context
-//           );
