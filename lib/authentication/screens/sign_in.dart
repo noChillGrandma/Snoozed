@@ -3,21 +3,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smarttodo/authentication69/authentication_service69.dart';
+import 'package:smarttodo/authentication/services/authentication_service.dart';
 
 
-class SignUp69 extends StatefulWidget {
-  const SignUp69({Key? key}) : super(key: key);
+class SignIn69 extends StatefulWidget {
+  const SignIn69({Key? key}) : super(key: key);
 
   @override
-  State<SignUp69> createState() => _SignUp69State();
+  State<SignIn69> createState() => _SignIn69State();
 }
 
-class _SignUp69State extends State<SignUp69> {
+class _SignIn69State extends State<SignIn69> {
 
   late TextEditingController emailController69 = TextEditingController();
   late TextEditingController passwordController69 = TextEditingController();
-
 
 
   @override
@@ -44,7 +43,7 @@ class _SignUp69State extends State<SignUp69> {
         child: Column(
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.3),
-            Text('Sign Up',
+            Text('Login',
               style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
@@ -163,7 +162,7 @@ class _SignUp69State extends State<SignUp69> {
                         ]
                       ),
                       child: CupertinoButton(
-                        child: Text('Sign Up',
+                        child: Text('login',
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -172,11 +171,11 @@ class _SignUp69State extends State<SignUp69> {
                         ), 
                         onPressed: () async {
                           try {
-                            context.read<AuthenticationService>().signUp(
+                            await context.read<AuthenticationService>().signIn(
                               email: emailController69.text.trim(),
-                              password: passwordController69.text.trim()
+                              password: passwordController69.text.trim(), context: context
                             );
-                          Navigator.of(context, rootNavigator: true).pop();
+                          // Navigator.of(context, rootNavigator: true).pop();
                             
                           } catch (eerr69) {
                             print(eerr69);
@@ -202,6 +201,7 @@ class _SignUp69State extends State<SignUp69> {
 }
 
 
-// context.read<AuthenticationService>().signUp(
+// context.read<AuthenticationService>().signIn(
 //             email: emailController.text.trim(),
-//             password: passwordController.text.trim());
+//             password: passwordController.text.trim(), context: context
+//           );

@@ -4,7 +4,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:smarttodo/authentication_page.dart';
+import 'package:smarttodo/authentication/screens/authentication_page.dart';
 import 'package:smarttodo/homepage.dart';
 
 class AuthenticationWrapper69 extends StatelessWidget {

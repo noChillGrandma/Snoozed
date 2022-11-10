@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
-import 'package:smarttodo/sign_in.dart';
-import 'package:smarttodo/sign_up.dart';
+import 'package:smarttodo/authentication/screens/sign_in.dart';
+import 'package:smarttodo/authentication/screens/sign_up.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({Key? key}) : super(key: key);

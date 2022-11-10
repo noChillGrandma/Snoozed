@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smarttodo/models69/app_user.dart';
+import 'package:smarttodo/models/app_user.dart';
 
 
 class DatabaseService {
