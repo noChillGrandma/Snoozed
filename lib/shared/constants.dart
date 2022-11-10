@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 
-
+// Generate strings with random characters and numbers
 const _charsABC123 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 const _chars123 = '1234567890';
 
@@ -18,20 +18,25 @@ String getRandomString123(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars123.codeUnitAt(_rnd.nextInt(_chars123.length))));
 
 
+// Generates a random string of 20 characters used for the documents name on Firestore for each task.
 String generateTaskDocID() {
   String questionID = getRandomStringABC123(20);
   return questionID;
 }
 
-const appVersionNumber = '1.1.2';
 
-const loadingWidget = SpinKitCircle(
-  color: CupertinoColors.white,
-);
-
+// returns the UID for the current logged in user
 myUID(BuildContext context){
   var user = Provider.of<User>(context, listen: false);
   var myUID = user.uid;
 
   return myUID;
 }
+
+
+// Constants variables
+const appVersionNumber = '1.1.2';
+
+const loadingWidget = SpinKitCircle(
+  color: CupertinoColors.white,
+);
