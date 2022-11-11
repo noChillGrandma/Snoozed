@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:smarttodo/add_task.dart';
+import 'package:smarttodo/tasks_list.dart';
 import 'package:smarttodo/functions.dart';
 import 'package:smarttodo/shared/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -72,58 +72,55 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height * 0.70,
                 width: MediaQuery.of(context).size.width * 1,
                 child: Row(
-                children: [
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: myTasksDBCollection(context)
-                        .where('isTaskCompleted', isEqualTo: false)
-                        .orderBy('dueDate')
-                        .limit(1)
-                        .snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                          return ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: snapshot.data?.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              QueryDocumentSnapshot<Object?>? user = snapshot.data?.docs[index];
-            
-                              var taskTile = user!.data().toString().contains('taskTile') ? user.get('taskTile') : '';
-                              var taskDescription = user.data().toString().contains('taskDescription') ? user.get('taskDescription') : '';
-                              var taskDocID = user.data().toString().contains('taskDocID') ? user.get('taskDocID') : '';
-                              var timesSkipped = user.data().toString().contains('timesSkipped') ? user.get('timesSkipped') : 1;
-                              var taskAttachedLink = user.data().toString().contains('taskAttachedLink') ? user.get('taskAttachedLink') : '';
-                              var dueDate = user.get('dueDate');
-                              var convertedDate = DateTime.parse(dueDate.toDate().toString());
-                              DateTime updatedDueDate = convertedDate.add(Duration(days: timesSkipped));
-                              Timestamp newDueDateTimestampFormat = Timestamp.fromDate(updatedDueDate);
+                  children: [
+                    Expanded(
+                      child: StreamBuilder(
+                        stream: myTasksDBCollection(context)
+                          .where('isTaskCompleted', isEqualTo: false)
+                          .orderBy('dueDate')
+                          .limit(1)
+                          .snapshots(),
+                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                            return ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data?.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                QueryDocumentSnapshot<Object?>? user = snapshot.data?.docs[index];
+              
+                                var taskTile = user!.data().toString().contains('taskTile') ? user.get('taskTile') : '';
+                                var taskDescription = user.data().toString().contains('taskDescription') ? user.get('taskDescription') : '';
+                                var taskDocID = user.data().toString().contains('taskDocID') ? user.get('taskDocID') : '';
+                                var timesSkipped = user.data().toString().contains('timesSkipped') ? user.get('timesSkipped') : 1;
+                                var taskAttachedLink = user.data().toString().contains('taskAttachedLink') ? user.get('taskAttachedLink') : '';
+                                var dueDate = user.get('dueDate');
+                                var convertedDate = DateTime.parse(dueDate.toDate().toString());
+                                DateTime updatedDueDate = convertedDate.add(Duration(days: timesSkipped));
+                                Timestamp newDueDateTimestampFormat = Timestamp.fromDate(updatedDueDate);
 
-
-                              deleteTask(){
-                                myTasksDBCollection(context)
+                                deleteTask(){
+                                  myTasksDBCollection(context)
                                   .doc(taskDocID)
                                   .delete();
-                              }
-        
-                              markTaskAsCompleted(){
-                                myTasksDBCollection(context)
+                                }
+          
+                                markTaskAsCompleted(){
+                                  myTasksDBCollection(context)
+                                  .doc(taskDocID)
+                                  .update({'isTaskCompleted': true});
+                                }
+
+                                skipTask(){
+                                  myTasksDBCollection(context)
                                   .doc(taskDocID)
                                   .update({
-                                    'isTaskCompleted': true,
+                                    'timesSkipped': timesSkipped + 1,
+                                    'dueDate': newDueDateTimestampFormat,
                                   });
-                              }
+                                }
 
-                              skipTask(){
-                                myTasksDBCollection(context)
-                                .doc(taskDocID)
-                                .update({
-                                  'timesSkipped': timesSkipped + 1,
-                                  'dueDate': newDueDateTimestampFormat,
-                                });
-                              }
-
-                              editTask(){
+                                editTask(){
                                   myTasksDBCollection(context)
                                   .doc(taskDocID)
                                   .update({
@@ -132,258 +129,11 @@ class _HomePageState extends State<HomePage> {
                                     'taskAttachedLink': editTaskLinkController.text,
                                   });
                                 }
-                              return Builder(
-                                builder: (context) {
-                                  if (isEditModeEnabled == true) {
-                                    return Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Container(
-                                            height: MediaQuery.of(context).size.height * 0.365,
-                                            width: MediaQuery.of(context).size.width * 0.90,
-                                            decoration: BoxDecoration(
-                                              color: const Color.fromARGB(255, 57, 59, 85),
-                                              borderRadius: const BorderRadius.all(
-                                                Radius.circular(35.0),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: CupertinoColors.black.withOpacity(0),
-                                                  spreadRadius: 4,
-                                                  blurRadius: 10,
-                                                  offset: const Offset(0, 3),
-                                                )
-                                              ]
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                              children: [
-                                                const SizedBox(height: 15,),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context).size.width * 0.85,
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
-                                                          child: Container(
-                                                            decoration: const BoxDecoration(
-                                                              color: Color.fromARGB(255, 62, 64, 93),
-                                                              borderRadius: BorderRadius.all(
-                                                              Radius.circular(20.0),
-                                                              ),
-                                                            ),
-                                                            child: CupertinoTextFormFieldRow(
-                                                              textCapitalization: TextCapitalization.sentences,
-                                                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                              maxLength: 65,
-                                                              maxLines: 1,
-                                                              placeholder: 'Enter a title for this task',
-                                                              decoration: const BoxDecoration(
-                                                                color: Color.fromARGB(255, 62, 64, 93),
-                                                                borderRadius: BorderRadius.all(
-                                                                Radius.circular(20.0),
-                                                                ),
-                                                              ),
-                                                              controller: editTaskTitleController,
-                                                              style: const TextStyle(
-                                                                fontSize: 20
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5,),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context).size.width * 0.85,
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
-                                                          child: Container(
-                                                            decoration: const BoxDecoration(
-                                                              color: Color.fromARGB(255, 62, 64, 93),
-                                                              borderRadius: BorderRadius.all(
-                                                              Radius.circular(20.0),
-                                                              ),
-                                                            ),
-                                                            child: CupertinoTextFormFieldRow(
-                                                              textCapitalization: TextCapitalization.sentences,
-                                                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                              maxLength: 1000,
-                                                              maxLines: 7,
-                                                              placeholder: 'Enter a description for this task',
-                                                              decoration: const BoxDecoration(
-                                                                color: Color.fromARGB(255, 62, 64, 93),
-                                                                borderRadius: BorderRadius.all(
-                                                                Radius.circular(20.0),
-                                                                ),
-                                                              ),
-                                                              controller: editTaskDescriptionController,
-                                                              style: const TextStyle(
-                                                                fontSize: 20
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5,),
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(width: 17,),
-                                                    const Icon(FontAwesomeIcons.link,
-                                                      size: 26,
-                                                    ),
-                                                    const SizedBox(width: 12,),
-                                                    Expanded(
-                                                      child: GestureDetector(
-                                                        onTap: () async {
-                                                        },
-                                                        child: Text(taskAttachedLink,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: const TextStyle(
-                                                            color: Color.fromARGB(255, 60, 153, 252),
-                                                            fontSize: 19,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: MediaQuery.of(context).size.width * 0.7,
-                                                      child: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
-                                                              child: Container(
-                                                                decoration: const BoxDecoration(
-                                                                  color: Color.fromARGB(255, 62, 64, 93),
-                                                                  borderRadius: BorderRadius.all(
-                                                                  Radius.circular(20.0),
-                                                                  ),
-                                                                ),
-                                                                child: CupertinoTextFormFieldRow(
-                                                                  textCapitalization: TextCapitalization.sentences,
-                                                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                  maxLength: 500,
-                                                                  maxLines: 1,
-                                                                  placeholder: 'Paste a link for this task',
-                                                                  decoration: const BoxDecoration(
-                                                                    color: Color.fromARGB(255, 62, 64, 93),
-                                                                    borderRadius: BorderRadius.all(
-                                                                    Radius.circular(20.0),
-                                                                    ),
-                                                                  ),
-                                                                  controller: editTaskLinkController,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20,),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 17,),
-                                              ],
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(12.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: const Color.fromARGB(255, 18, 18, 27),
-                                                  borderRadius: const BorderRadius.all(
-                                                    Radius.circular(35.0),
-                                                  ),
-                                       
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: CupertinoColors.black.withOpacity(0),
-                                                      spreadRadius: 4,
-                                                      blurRadius: 10,
-                                                      offset: const Offset(0, 3),
-                                                    )
-                                                  ]
-                                                ),
-                                                child: CupertinoButton(
-                                                  child: const Text('Cancel',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: CupertinoColors.white,
-                                                      fontSize: 22
-                                                    ),
-                                                  ), 
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      isEditModeEnabled = false;
-                                                    });
-                                                  }
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(12.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: CupertinoColors.white,
-                                                  borderRadius: const BorderRadius.all(
-                                                    Radius.circular(35.0),
-                                                  ),
-                                            
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: CupertinoColors.black.withOpacity(0),
-                                                      spreadRadius: 4,
-                                                      blurRadius: 10,
-                                                      offset: const Offset(0, 3),
-                                                    )
-                                                  ]
-                                                ),
-                                                child: CupertinoButton(
-                                                  child: const Text('Save',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Color.fromARGB(255, 18, 18, 27),
-                                                      fontSize: 22
-                                                    ),
-                                                  ), 
-                                                  onPressed: () {
-                                                    editTask();
-                                                    setState(() {
-                                                      isEditModeEnabled = false;
-                                                    });
-                                                  }
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                       
-                                        ],
-                                      ),
-                                      ],
-                                    );
-                                  } else {
-                                    return Column(
-                                    children: [
-                                      Stack(
-                                        alignment: AlignmentDirectional.bottomEnd,
+
+                                return Builder(
+                                  builder: (context) {
+                                    if (isEditModeEnabled == true) {
+                                      return Column(
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(20.0),
@@ -404,263 +154,502 @@ class _HomePageState extends State<HomePage> {
                                                   )
                                                 ]
                                               ),
-                                        child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: [
-                                              const SizedBox(height: 20,),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 8, bottom: 12, left: 15, right: 15),
-                                                child: SelectableText(taskTile,
-                                                textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 5, bottom: 12, left: 12, right: 12),
-                                                child: SelectableText(taskDescription,
-                                                textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                  ),
-                                                  maxLines: 8,
-                                                ),
-                                              ),
-                                              Builder(
-                                                builder: (context) {
-                                                  if (taskAttachedLink == '') {
-                                                    return Container();
-                                                  } else {
-                                                    return Row(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                children: [
+                                                  const SizedBox(height: 15,),
+                                                  SizedBox(
+                                                    width: MediaQuery.of(context).size.width * 0.85,
+                                                    child: Row(
                                                       children: [
-                                                        const SizedBox(width: 17,),
-                                                        const Icon(FontAwesomeIcons.link,
-                                                          size: 26,
-                                                        ),
-                                                        const SizedBox(width: 12,),
                                                         Expanded(
-                                                          child: GestureDetector(
-                                                            onTap: () async {
-                                                              await _launchInBrowser(Uri.parse(taskAttachedLink)); 
-                                                            },
-                                                            child: Text(taskAttachedLink,
-                                                              overflow: TextOverflow.ellipsis,
-                                                              style: const TextStyle(
-                                                                color: Color.fromARGB(255, 60, 153, 252),
-                                                                fontSize: 19,
-                                                                fontWeight: FontWeight.bold,
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                                                            child: Container(
+                                                              decoration: const BoxDecoration(
+                                                                color: Color.fromARGB(255, 62, 64, 93),
+                                                                borderRadius: BorderRadius.all(
+                                                                Radius.circular(20.0),
+                                                                ),
+                                                              ),
+                                                              child: CupertinoTextFormFieldRow(
+                                                                textCapitalization: TextCapitalization.sentences,
+                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                maxLength: 65,
+                                                                maxLines: 1,
+                                                                placeholder: 'Enter a title for this task',
+                                                                decoration: const BoxDecoration(
+                                                                  color: Color.fromARGB(255, 62, 64, 93),
+                                                                  borderRadius: BorderRadius.all(
+                                                                  Radius.circular(20.0),
+                                                                  ),
+                                                                ),
+                                                                controller: editTaskTitleController,
+                                                                style: const TextStyle(
+                                                                  fontSize: 20,
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
                                                         ),
-                                                        const SizedBox(width: 20,),
                                                       ],
-                                                    );
-                                                  }
-                                                }
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 5,),
+                                                  SizedBox(
+                                                    width: MediaQuery.of(context).size.width * 0.85,
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                                                            child: Container(
+                                                              decoration: const BoxDecoration(
+                                                                color: Color.fromARGB(255, 62, 64, 93),
+                                                                borderRadius: BorderRadius.all(
+                                                                Radius.circular(20.0),
+                                                                ),
+                                                              ),
+                                                              child: CupertinoTextFormFieldRow(
+                                                                textCapitalization: TextCapitalization.sentences,
+                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                maxLength: 1000,
+                                                                maxLines: 7,
+                                                                placeholder: 'Enter a description for this task',
+                                                                decoration: const BoxDecoration(
+                                                                  color: Color.fromARGB(255, 62, 64, 93),
+                                                                  borderRadius: BorderRadius.all(
+                                                                  Radius.circular(20.0),
+                                                                  ),
+                                                                ),
+                                                                controller: editTaskDescriptionController,
+                                                                style: const TextStyle(
+                                                                  fontSize: 20,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 5,),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(width: 17,),
+                                                      const Icon(FontAwesomeIcons.link,
+                                                        size: 26,
+                                                      ),
+                                                      const SizedBox(width: 12,),
+                                                      Expanded(
+                                                        child: Text(taskAttachedLink,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: const TextStyle(
+                                                            color: Color.fromARGB(255, 60, 153, 252),
+                                                            fontSize: 19,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: MediaQuery.of(context).size.width * 0.7,
+                                                        child: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                                                                child: Container(
+                                                                  decoration: const BoxDecoration(
+                                                                    color: Color.fromARGB(255, 62, 64, 93),
+                                                                    borderRadius: BorderRadius.all(
+                                                                    Radius.circular(20.0),
+                                                                    ),
+                                                                  ),
+                                                                  child: CupertinoTextFormFieldRow(
+                                                                    textCapitalization: TextCapitalization.sentences,
+                                                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                    maxLength: 500,
+                                                                    maxLines: 1,
+                                                                    placeholder: 'Paste a link for this task',
+                                                                    decoration: const BoxDecoration(
+                                                                      color: Color.fromARGB(255, 62, 64, 93),
+                                                                      borderRadius: BorderRadius.all(
+                                                                      Radius.circular(20.0),
+                                                                      ),
+                                                                    ),
+                                                                    controller: editTaskLinkController,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 20,),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 17,),
+                                                ],
                                               ),
-                                              const SizedBox(height: 17,),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: const Color.fromARGB(255, 18, 18, 27),
+                                                      borderRadius: const BorderRadius.all(
+                                                        Radius.circular(35.0),
+                                                      ),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: CupertinoColors.black.withOpacity(0),
+                                                          spreadRadius: 4,
+                                                          blurRadius: 10,
+                                                          offset: const Offset(0, 3),
+                                                        )
+                                                      ]
+                                                    ),
+                                                    child: CupertinoButton(
+                                                      child: const Text('Cancel',
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: CupertinoColors.white,
+                                                          fontSize: 22
+                                                        ),
+                                                      ), 
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          isEditModeEnabled = false;
+                                                        });
+                                                      }
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: CupertinoColors.white,
+                                                      borderRadius: const BorderRadius.all(
+                                                        Radius.circular(35.0),
+                                                      ),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: CupertinoColors.black.withOpacity(0),
+                                                          spreadRadius: 4,
+                                                          blurRadius: 10,
+                                                          offset: const Offset(0, 3),
+                                                        )
+                                                      ]
+                                                    ),
+                                                    child: CupertinoButton(
+                                                      child: const Text('Save',
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Color.fromARGB(255, 18, 18, 27),
+                                                          fontSize: 22
+                                                        ),
+                                                      ), 
+                                                      onPressed: () {
+                                                        editTask();
+                                                        setState(() {
+                                                          isEditModeEnabled = false;
+                                                        });
+                                                      }
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                             ],
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return Column(
+                                        children: [
+                                          Stack(
+                                            alignment: AlignmentDirectional.bottomEnd,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(20.0),
+                                                child: Container(
+                                                  height: MediaQuery.of(context).size.height * 0.365,
+                                                  width: MediaQuery.of(context).size.width * 0.90,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color.fromARGB(255, 57, 59, 85),
+                                                    borderRadius: const BorderRadius.all(
+                                                      Radius.circular(35.0),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: CupertinoColors.black.withOpacity(0),
+                                                        spreadRadius: 4,
+                                                        blurRadius: 10,
+                                                        offset: const Offset(0, 3),
+                                                      )
+                                                    ]
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                    children: [
+                                                      const SizedBox(height: 20,),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(top: 8, bottom: 12, left: 15, right: 15),
+                                                        child: SelectableText(taskTile,
+                                                        textAlign: TextAlign.center,
+                                                          style: const TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(top: 5, bottom: 12, left: 12, right: 12),
+                                                        child: SelectableText(taskDescription,
+                                                          textAlign: TextAlign.start,
+                                                          style: const TextStyle(
+                                                            fontSize: 20,
+                                                          ),
+                                                          maxLines: 8,
+                                                        ),
+                                                      ),
+                                                      Builder(
+                                                        builder: (context) {
+                                                          if (taskAttachedLink == '') {
+                                                            return Container();
+                                                          } else {
+                                                            return Row(
+                                                              children: [
+                                                                const SizedBox(width: 17,),
+                                                                const Icon(FontAwesomeIcons.link,
+                                                                  size: 26,
+                                                                ),
+                                                                const SizedBox(width: 12,),
+                                                                Expanded(
+                                                                  child: GestureDetector(
+                                                                    onTap: () async {
+                                                                      await _launchInBrowser(Uri.parse(taskAttachedLink)); 
+                                                                    },
+                                                                    child: Text(taskAttachedLink,
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                      style: const TextStyle(
+                                                                        color: Color.fromARGB(255, 60, 153, 252),
+                                                                        fontSize: 19,
+                                                                        fontWeight: FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(width: 20,),
+                                                              ],
+                                                            );
+                                                          }
+                                                        }
+                                                      ),
+                                                    const SizedBox(height: 17,),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: -15,
+                                              bottom: -20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(top: 0, left: 0, right: 25, bottom: 28),
+                                                child: Container(
+                                                  decoration: const BoxDecoration(
+                                                    color: Color.fromARGB(255, 18, 18, 27),
+                                                    borderRadius: BorderRadius.all(
+                                                      Radius.circular(35),
+                                                    ),
+                                                  ),
+                                                  child: Builder(
+                                                    builder: (context) {
+                                                      if (isEditModeEnabled == false) {
+                                                        return CupertinoButton(
+                                                        padding: const EdgeInsets.all(0),
+                                                        pressedOpacity: 0.8,
+                                                        child: const Icon(FontAwesomeIcons.pen,
+                                                          size: 22,),
+                                                        onPressed: (){
+                                                          setState(() {
+                                                            editTaskTitleController.text = taskTile;
+                                                            editTaskLinkController.text = taskAttachedLink;
+                                                            editTaskDescriptionController.text = taskDescription;
+                                                            isEditModeEnabled = true;
+                                                          });
+                                                        }
+                                                      );
+                                                      } else {
+                                                        return Container();
+                                                      }
+                                                    }
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            const SizedBox(width: 5,),
+                                            Container(
+                                              height: 80,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                color: const Color.fromARGB(255, 18, 18, 27),
+                                                borderRadius: const BorderRadius.all(
+                                                  Radius.circular(50.0),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: CupertinoColors.systemGrey.withOpacity(0.05),
+                                                    spreadRadius: 4,
+                                                    blurRadius: 10,
+                                                    offset: const Offset(0, 3),
+                                                  )
+                                                ]
+                                              ),
+                                              child: CupertinoButton(
+                                                child: const Icon(FontAwesomeIcons.trashCan,
+                                                color: CupertinoColors.systemRed,
+                                                  size: 30,
+                                                ),
+                                                onPressed: () {
+                                                  deleteTask();
+                                                },
+                                              ),
+                                            ),
+                                            Column(
+                                              children: [
+                                                const SizedBox(height: 40,),
+                                                Container(
+                                                  height: 100,
+                                                  width: 100,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color.fromARGB(255, 18, 18, 27),
+                                                    borderRadius: const BorderRadius.all(
+                                                      Radius.circular(50.0),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: CupertinoColors.systemGrey.withOpacity(0.05),
+                                                        spreadRadius: 4,
+                                                        blurRadius: 10,
+                                                        offset: const Offset(0, 3),
+                                                      )
+                                                    ]
+                                                  ),
+                                                  child: CupertinoButton(
+                                                    child: const Icon(FontAwesomeIcons.check,
+                                                    color: CupertinoColors.activeGreen,
+                                                      size: 55,
+                                                    ),
+                                                    onPressed: (){
+                                                      markTaskAsCompleted();
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Container(
+                                              height: 80,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                color: const Color.fromARGB(255, 18, 18, 27),
+                                                borderRadius: const BorderRadius.all(
+                                                  Radius.circular(50.0),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: CupertinoColors.systemGrey.withOpacity(0.05),
+                                                    spreadRadius: 4,
+                                                    blurRadius: 10,
+                                                    offset: const Offset(0, 3),
+                                                  )
+                                                ]
+                                              ),
+                                              child: CupertinoButton(
+                                                child: const Icon(FontAwesomeIcons.share,
+                                                color: Color.fromARGB(255, 255, 179, 0),
+                                                  size: 30,
+                                                ),
+                                                onPressed: (){
+                                                  skipTask();
+                                                },
+                                              ),
+                                            ),
+                                            const SizedBox(width: 5,),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                    }
+                                  }
+                                );
+                              }
+                            );
+                          } if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
+                            // if the stream of data is empty
+                            return Column(
+                              children: [
+                                const SizedBox(height: 10,),
+                                const Image(
+                                  height: 300,
+                                  fit: BoxFit.fitHeight,
+                                  image: AssetImage('assets/images/celebration_task_list_empty.png')
+                                ),
+                                const SizedBox(height: 30,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text('Your task list is empty, Yay!',
+                                      style: TextStyle(
+                                        color: CupertinoColors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 30, right: 30),
+                                        child: Text('Add more tasks by tapping the "+" icon below',
+                                          style: TextStyle(
+                                            color: CupertinoColors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                     ),
-                                      Positioned(
-                                        right: -15,
-                                        bottom: -20,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(top: 0, left: 0, right: 25, bottom: 28),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Color.fromARGB(255, 18, 18, 27),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(35),
-                                              ),
-                                            ),
-                                            child: Builder(
-                                              builder: (context) {
-                                                if (isEditModeEnabled == false) {
-                                                  return CupertinoButton(
-                                                  padding: const EdgeInsets.all(0),
-                                                  pressedOpacity: 0.8,
-                                                  child: const Icon(FontAwesomeIcons.pen,
-                                                    size: 22,),
-                                                  onPressed: (){
-                                                    setState(() {
-                                                      editTaskTitleController.text = taskTile;
-                                                      editTaskLinkController.text = taskAttachedLink;
-                                                      editTaskDescriptionController.text = taskDescription;
-                                                      isEditModeEnabled = true;
-                                                    });
-                                                  }
-                                                );
-                                                } else {
-                                                  return Container();
-                                                }
-                                              }
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          const SizedBox(width: 5,),
-                                          Container(
-                                            height: 80,
-                                            width: 80,
-                                            decoration: BoxDecoration(
-                                              color: const Color.fromARGB(255, 18, 18, 27),
-                                              borderRadius: const BorderRadius.all(
-                                                Radius.circular(50.0),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: CupertinoColors.systemGrey.withOpacity(0.05),
-                                                  spreadRadius: 4,
-                                                  blurRadius: 10,
-                                                  offset: const Offset(0, 3),
-                                                )
-                                              ]
-                                            ),
-                                            child: CupertinoButton(
-                                              child: const Icon(FontAwesomeIcons.trashCan,
-                                              color: CupertinoColors.systemRed,
-                                                size: 30,
-                                              ),
-                                              onPressed: () {
-                                                deleteTask();
-                                              },
-                                            ),
-                                          ),
-                                          Column(
-                                            children: [
-                                              const SizedBox(height: 40,),
-                                              Container(
-                                                height: 100,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  color: const Color.fromARGB(255, 18, 18, 27),
-                                                  borderRadius: const BorderRadius.all(
-                                                    Radius.circular(50.0),
-                                                  ),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: CupertinoColors.systemGrey.withOpacity(0.05),
-                                                      spreadRadius: 4,
-                                                      blurRadius: 10,
-                                                      offset: const Offset(0, 3),
-                                                    )
-                                                  ]
-                                                ),
-                                                child: CupertinoButton(
-                                                  child: const Icon(FontAwesomeIcons.check,
-                                                  color: CupertinoColors.activeGreen,
-                                                    size: 55,
-                                                  ),
-                                                  onPressed: (){
-                                                    markTaskAsCompleted();
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 80,
-                                            width: 80,
-                                            decoration: BoxDecoration(
-                                              color: const Color.fromARGB(255, 18, 18, 27),
-                                              borderRadius: const BorderRadius.all(
-                                                Radius.circular(50.0),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: CupertinoColors.systemGrey.withOpacity(0.05),
-                                                  spreadRadius: 4,
-                                                  blurRadius: 10,
-                                                  offset: const Offset(0, 3),
-                                                )
-                                              ]
-                                            ),
-                                            child: CupertinoButton(
-                                              child: const Icon(FontAwesomeIcons.share,
-                                              color: Color.fromARGB(255, 255, 179, 0),
-                                                size: 30,
-                                              ),
-                                              onPressed: (){
-                                                skipTask();
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(width: 5,),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                  }
-                                }
-                              );
-                            }
-                          );
-                        } if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
-                          // if the stream of data is empty
-                          return Column(
-                                children: [
-                                  const SizedBox(height: 10,),
-                                  const Image(
-                                    height: 300,
-                                    fit: BoxFit.fitHeight,
-                                    image: AssetImage('assets/images/celebration_task_list_empty.png')
-                                  ),
-                                  const SizedBox(height: 30,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Text('Your task list is empty, Yay!',
-                                        style: TextStyle(
-                                          color: CupertinoColors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: 30, right: 30),
-                                          child: Text('Add more tasks by tapping the "+" icon below',
-                                            style: TextStyle(
-                                              color: CupertinoColors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                        } else {
-                          // Still loading
-                          return loadingWidget;
-                        }
-                      },
+                                  ],
+                                ),
+                              ],
+                            );
+                          } else {
+                            return loadingWidget;
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                ]
+                  ]
                 ),
               )
             ],
           ),
-          
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -711,7 +700,6 @@ class _HomePageState extends State<HomePage> {
                   color: CupertinoColors.white,),
                   onPressed: (){
                     _showAddTaskPanel(context);
-             
                   },
                 ),
               ),
