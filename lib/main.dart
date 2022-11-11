@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smarttodo/authentication69/authentication_service69.dart';
-import 'package:smarttodo/authentication69/wrapper69.dart';
+import 'package:smarttodo/authentication/services/authentication_service.dart';
+import 'package:smarttodo/authentication/services/wrapper.dart';
 
 
 void main() async {
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             )
           )
         ),
-        home: AuthenticationWrapper69(),
+        home: AuthenticationWrapper(),
         localizationsDelegates: <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,

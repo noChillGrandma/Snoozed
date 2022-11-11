@@ -1,17 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
-import 'package:smarttodo/sign_in.dart';
-import 'package:smarttodo/sign_up.dart';
+import 'package:smarttodo/authentication/screens/sign_in.dart';
+import 'package:smarttodo/authentication/screens/sign_up.dart';
 
-class AuthenticationPage69 extends StatefulWidget {
-  const AuthenticationPage69({Key? key}) : super(key: key);
+class AuthenticationPage extends StatefulWidget {
+  const AuthenticationPage({Key? key}) : super(key: key);
 
   @override
-  State<AuthenticationPage69> createState() => _AuthenticationPage69State();
+  State<AuthenticationPage> createState() => _AuthenticationPageState();
 }
 
-class _AuthenticationPage69State extends State<AuthenticationPage69> {
+class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -70,7 +70,7 @@ class _AuthenticationPage69State extends State<AuthenticationPage69> {
                           ),
                         ), 
                         onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignIn69()));
+                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignInPage()));
                         }
                       ),
                     ),
@@ -107,7 +107,7 @@ class _AuthenticationPage69State extends State<AuthenticationPage69> {
                           ),
                         ), 
                         onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignUp69()));
+                          Navigator.push(context, CupertinoPageRoute(builder: (context) => SignUpPage()));
                         }
                       ),
                     ),

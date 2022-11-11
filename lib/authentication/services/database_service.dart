@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smarttodo/models69/app_user.dart';
+import 'package:smarttodo/models/app_user.dart';
 
 
 class DatabaseService {
@@ -7,9 +7,7 @@ class DatabaseService {
   final String uid;
   DatabaseService({ required this.uid });
 
-  // collection reference
   final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
-
 
   Future<void> updateUserData(
     Timestamp joinDate,
@@ -19,7 +17,6 @@ class DatabaseService {
     });
   }
 
-  // users list from snapshot
   List<AppUser> _usersListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc){
       //print(doc.data);
@@ -30,7 +27,6 @@ class DatabaseService {
     }).toList();
   }
 
-  // user data from snapshots
   AppUser _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return AppUser(
       uid: uid,
@@ -39,16 +35,13 @@ class DatabaseService {
     );
   }
 
-  // get brews stream
   Stream<List<AppUser>> get users {
     return usersCollection.snapshots()
       .map(_usersListFromSnapshot);
   }
 
-  // get user doc stream
   Stream<AppUser> get userData {
     return usersCollection.doc(uid).snapshots()
       .map(_userDataFromSnapshot);
   }
-
 }

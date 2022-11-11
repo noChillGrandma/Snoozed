@@ -3,20 +3,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smarttodo/authentication69/authentication_service69.dart';
+import 'package:smarttodo/authentication/services/authentication_service.dart';
 
 
-class SignUp69 extends StatefulWidget {
-  const SignUp69({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignUp69> createState() => _SignUp69State();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUp69State extends State<SignUp69> {
+class _SignUpPageState extends State<SignUpPage> {
 
-  late TextEditingController emailController69 = TextEditingController();
-  late TextEditingController passwordController69 = TextEditingController();
+  late TextEditingController emailController = TextEditingController();
+  late TextEditingController passwordController = TextEditingController();
 
 
 
@@ -77,18 +77,7 @@ class _SignUp69State extends State<SignUp69> {
                             Radius.circular(20.0),
                             ),
                           ),
-                          controller: emailController69,
-                          // validator: (quickReply) {
-                          //   if (quickReply == null || quickReply.isEmpty) {
-                          //     return 'please type something first';
-                              
-                          //   } else if (quickReply.length < 3) {
-                          //     return 'must be at least 3 characters long';
-                              
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // }
+                          controller: emailController,
                         ),
                       ),
                     ),
@@ -122,18 +111,7 @@ class _SignUp69State extends State<SignUp69> {
                             Radius.circular(20.0),
                             ),
                           ),
-                          controller: passwordController69,
-                          // validator: (quickReply) {
-                          //   if (quickReply == null || quickReply.isEmpty) {
-                          //     return 'please type something first';
-                              
-                          //   } else if (quickReply.length < 3) {
-                          //     return 'must be at least 3 characters long';
-                              
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // }
+                          controller: passwordController,
                         ),
                       ),
                     ),
@@ -173,13 +151,13 @@ class _SignUp69State extends State<SignUp69> {
                         onPressed: () async {
                           try {
                             context.read<AuthenticationService>().signUp(
-                              email: emailController69.text.trim(),
-                              password: passwordController69.text.trim()
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim()
                             );
                           Navigator.of(context, rootNavigator: true).pop();
                             
-                          } catch (eerr69) {
-                            print(eerr69);
+                          } catch (e) {
+                            print(e);
                             
                           }
                           
