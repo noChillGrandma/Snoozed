@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                                           Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: Container(
-                                              height: MediaQuery.of(context).size.height * 0.365,
+                                              height: MediaQuery.of(context).size.height * 0.5,
                                               width: MediaQuery.of(context).size.width * 0.90,
                                               decoration: BoxDecoration(
                                                 color: const Color.fromARGB(255, 57, 59, 85),
@@ -197,6 +197,7 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   const SizedBox(height: 5,),
                                                   SizedBox(
+                                                    // height: MediaQuery.of(context).size.height * 0.1,
                                                     width: MediaQuery.of(context).size.width * 0.85,
                                                     child: Row(
                                                       children: [
@@ -214,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                                                                 textCapitalization: TextCapitalization.sentences,
                                                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                                                 maxLength: 1000,
-                                                                maxLines: 7,
+                                                                maxLines: 6,
                                                                 placeholder: 'Enter a description for this task',
                                                                 decoration: const BoxDecoration(
                                                                   color: Color.fromARGB(255, 62, 64, 93),
@@ -241,18 +242,18 @@ class _HomePageState extends State<HomePage> {
                                                         size: 26,
                                                       ),
                                                       const SizedBox(width: 12,),
-                                                      Expanded(
-                                                        child: Text(taskAttachedLink,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: const TextStyle(
-                                                            color: Color.fromARGB(255, 60, 153, 252),
-                                                            fontSize: 19,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      // Expanded(
+                                                      //   child: Text(taskAttachedLink,
+                                                      //     overflow: TextOverflow.ellipsis,
+                                                      //     style: const TextStyle(
+                                                      //       color: Color.fromARGB(255, 60, 153, 252),
+                                                      //       fontSize: 19,
+                                                      //       fontWeight: FontWeight.bold,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
                                                       SizedBox(
-                                                        width: MediaQuery.of(context).size.width * 0.7,
+                                                        width: MediaQuery.of(context).size.width * 0.68,
                                                         child: Row(
                                                           children: [
                                                             Expanded(
@@ -377,9 +378,9 @@ class _HomePageState extends State<HomePage> {
                                             alignment: AlignmentDirectional.bottomEnd,
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsets.all(20.0),
+                                                padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
                                                 child: Container(
-                                                  height: MediaQuery.of(context).size.height * 0.365,
+                                                  height: MediaQuery.of(context).size.height * 0.40,
                                                   width: MediaQuery.of(context).size.width * 0.90,
                                                   decoration: BoxDecoration(
                                                     color: const Color.fromARGB(255, 57, 59, 85),
@@ -409,14 +410,16 @@ class _HomePageState extends State<HomePage> {
                                                           ),
                                                         ),
                                                       ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top: 5, bottom: 12, left: 12, right: 12),
-                                                        child: SelectableText(taskDescription,
-                                                          textAlign: TextAlign.start,
-                                                          style: const TextStyle(
-                                                            fontSize: 20,
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(top: 5, bottom: 12, left: 12, right: 12),
+                                                          child: SelectableText(taskDescription,
+                                                            textAlign: TextAlign.start,
+                                                            style: const TextStyle(
+                                                              fontSize: 20,
+                                                            ),
+                                                            maxLines: 8,
                                                           ),
-                                                          maxLines: 8,
                                                         ),
                                                       ),
                                                       Builder(
@@ -529,10 +532,10 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             Column(
                                               children: [
-                                                const SizedBox(height: 40,),
+                                                const SizedBox(height: 20,),
                                                 Container(
-                                                  height: 100,
-                                                  width: 100,
+                                                  height: 95,
+                                                  width: 95,
                                                   decoration: BoxDecoration(
                                                     color: const Color.fromARGB(255, 18, 18, 27),
                                                     borderRadius: const BorderRadius.all(
