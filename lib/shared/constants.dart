@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -40,3 +41,14 @@ const appVersionNumber = '1.1.2';
 const loadingWidget = SpinKitCircle(
   color: CupertinoColors.white,
 );
+
+
+myTasksDBCollection(BuildContext context){
+  var dbReference = 
+    FirebaseFirestore.instance
+    .collection('users')
+    .doc(myUID(context))
+    .collection('myTasks');
+
+  return dbReference;
+}
