@@ -532,10 +532,10 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             Column(
                                               children: [
-                                                const SizedBox(height: 20,),
+                                                const SizedBox(height: 40,),
                                                 Container(
-                                                  height: 95,
-                                                  width: 95,
+                                                  height: 100,
+                                                  width: 100,
                                                   decoration: BoxDecoration(
                                                     color: const Color.fromARGB(255, 18, 18, 27),
                                                     borderRadius: const BorderRadius.all(
