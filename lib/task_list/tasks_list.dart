@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:smarttodo/functions.dart';
+import 'package:smarttodo/functions/delete_completed_tasks.dart';
 import 'package:smarttodo/shared/constants.dart';
 
 

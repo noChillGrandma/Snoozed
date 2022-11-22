@@ -1,25 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttodo/authentication/services/authentication_service.dart';
-import 'package:smarttodo/shared/constants.dart';
-
-
-
-deleteCompletedTasks(BuildContext context) async {
-  QuerySnapshot eventsQuery = 
-    await myTasksDBCollection(context)
-    .where('isTaskCompleted', isEqualTo: true)
-    .get();
-
-  for (var value in eventsQuery.docs) {
-    value.reference.delete();
-  }
-}
-
-
 
 
 logoutConfirmationPrompt(BuildContext context){
