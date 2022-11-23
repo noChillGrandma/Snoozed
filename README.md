@@ -10,8 +10,9 @@
 - [YouTube video link](https://www.youtube.com/watch?v=qVkBJi1zEtU)
 
 ### Stack
-- Flutter
-- Cloud Firestore
+- Front-end: Flutter
+- Back-end: Serverless (Firebase)
+- Storage: Cloud Firestore
 
 ### Screenshots:
 ![snoozed_screens](https://user-images.githubusercontent.com/64256363/201170088-02271dae-1cd0-487c-b485-08d6bd0a5a73.png)
