@@ -36,7 +36,7 @@ myUID(BuildContext context){
 
 
 // Constants variables
-const appVersionNumber = '1.1.2';
+const appVersionNumber = '1.1.3';
 
 const loadingWidget = SpinKitCircle(
   color: CupertinoColors.white,

@@ -744,49 +744,43 @@ Future<void> _launchInBrowser(Uri url) async {
           onTap: () => Navigator.of(context).pop(),
           child: Container(
             color: const Color.fromRGBO(0, 0, 0, 0.001),
-            child: GestureDetector(
-              onTap: () {},
-              child: DraggableScrollableSheet(
-                initialChildSize: 0.75,
-                minChildSize: 0.2,
-                builder: (_, controller) {
-                  return Container(
-                    height: 600,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF28293d),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25.0),
-                        topRight: Radius.circular(25.0),
-                      ),
+            child: DraggableScrollableSheet(
+              initialChildSize: 0.75,
+              minChildSize: 0.2,
+              builder: (_, controller) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF28293d),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25.0),
+                      topRight: Radius.circular(25.0),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onVerticalDragDown: (_) {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
-                          child: Column(
-                            children: const [
-                              SizedBox(height: 30,),
-                              Text('Add New Task',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: CupertinoColors.white,
-                                  fontWeight: FontWeight.bold
-                                ),
-                              ),
-                              SizedBox(height: 20,),
-                            ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: const [
+                          SizedBox(height: 30,),
+                          Text('Add New Task',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: CupertinoColors.white,
+                              fontWeight: FontWeight.bold
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.45,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Form(
-                                  key: formKeySaveTask,
+                          SizedBox(height: 20,),
+                        ],
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Form(
+                                key: formKeySaveTask,
+                                child: SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.85,
                                   child: Column(
                                     children: [
                                       SizedBox(
@@ -963,15 +957,15 @@ Future<void> _launchInBrowser(Uri url) async {
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         );
